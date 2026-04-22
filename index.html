@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AdmitHub — The admit command center for home health, by 2028</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0b1a2b;
+    --ink-2:     #24354a;
+    --muted:     #5b6b7f;
+    --line:      #e4e7ec;
+    --line-soft: #eef1f4;
+    --bg:        #fbfaf7;
+    --bg-2:      #f4f2ec;
+    --paper:     #ffffff;
+    --primary:   #1f4a7a;   /* trustworthy navy */
+    --primary-2: #0f2a47;
+    --accent:    #0f9b7a;   /* mint/teal */
+    --accent-2:  #0b7a5f;
+    --warm:      #d08a4a;   /* soft amber */
+    --lilac:     #7a6ec9;   /* subtle 3rd accent */
+    --shadow:    0 1px 2px rgba(10,20,40,.05), 0 6px 24px rgba(10,20,40,.06);
+    --radius:    14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+  h1 { font-size: clamp(40px, 6vw, 72px); line-height: 1.05; margin: 0; }
+  h2 { font-size: clamp(28px, 3.6vw, 44px); line-height: 1.15; margin: 0 0 18px; }
+  h3 { font-size: 22px; line-height: 1.25; margin: 0 0 10px; font-weight: 600; }
+  p  { margin: 0 0 14px; color: var(--ink-2); }
+  a  { color: var(--primary); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* -- NAV -- */
+  .nav {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: saturate(160%) blur(10px);
+    background: rgba(251,250,247,.75);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; max-width: 1180px; margin: 0 auto;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; font-size: 17px; }
+  .brand-mark { width: 28px; height: 28px; }
+  .nav-links { display: flex; gap: 26px; font-size: 14px; color: var(--muted); }
+  .nav-links a { color: var(--muted); text-decoration: none; transition: color .2s; }
+  .nav-links a:hover { color: var(--ink); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* -- HERO -- */
+  .hero {
+    padding: 96px 0 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1.1fr .9fr; gap: 64px; align-items: center;
+  }
+  @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--accent-2);
+    text-transform: uppercase; letter-spacing: .12em;
+    padding: 6px 12px; border: 1px solid rgba(15,155,122,.25);
+    background: rgba(15,155,122,.06); border-radius: 999px; margin-bottom: 20px;
+  }
+  .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .updated {
+    display: inline-block; margin-left: 10px;
+    font-size: 12px; color: var(--muted); font-weight: 500;
+    letter-spacing: .04em;
+  }
+  @media (max-width: 540px) { .updated { display: block; margin: 8px 0 0; } }
+  .hero h1 em { font-style: normal; color: var(--primary); }
+  .hero .lede { font-size: 19px; color: var(--ink-2); margin-top: 24px; max-width: 560px; }
+  .hero-meta { display: flex; gap: 28px; margin-top: 36px; flex-wrap: wrap; }
+  .meta-chip { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .meta-chip svg { width: 16px; height: 16px; color: var(--accent); }
+
+  /* -- SECTION -- */
+  section { padding: 88px 0; }
+  .section-kicker {
+    font-size: 13px; font-weight: 600; color: var(--accent-2);
+    text-transform: uppercase; letter-spacing: .14em; margin-bottom: 14px;
+  }
+
+  /* -- PROBLEM -- */
+  .problem { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; gap: 36px; } }
+  .problem p { font-size: 18px; max-width: 520px; }
+
+  /* -- PILLARS -- */
+  .pillars-intro { text-align: center; margin-bottom: 64px; }
+  .pillars-intro h2 { max-width: 780px; margin: 0 auto 14px; }
+  .pillars-intro p { max-width: 620px; margin: 0 auto; color: var(--muted); font-size: 17px; }
+
+  .pillar {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+    align-items: center; padding: 64px 0; border-top: 1px solid var(--line-soft);
+    scroll-margin-top: 72px;
+  }
+  .pillar-summary {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px;
+    max-width: 1100px; margin: 0 auto 64px;
+  }
+  @media (max-width: 1080px) { .pillar-summary { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 540px)  { .pillar-summary { grid-template-columns: repeat(2, 1fr); } }
+  .pillar-chip {
+    display: flex; flex-direction: column; gap: 6px;
+    padding: 14px 12px; min-height: 110px;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 10px;
+    text-decoration: none; color: var(--ink);
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .pillar-chip:hover {
+    transform: translateY(-2px); border-color: var(--accent); box-shadow: var(--shadow);
+  }
+  .pillar-chip-num {
+    font-size: 11px; font-weight: 600; color: var(--primary); letter-spacing: .08em;
+  }
+  .pillar-chip-title {
+    font-size: 13px; font-weight: 400; line-height: 1.3; color: var(--ink-2);
+  }
+  .pillar:first-of-type { border-top: 0; }
+  @media (max-width: 900px) { .pillar { grid-template-columns: 1fr; gap: 32px; padding: 48px 0; } }
+  .pillar.reverse .pillar-copy { order: 2; }
+  .pillar.reverse .pillar-visual { order: 1; }
+  @media (max-width: 900px) { .pillar.reverse .pillar-copy, .pillar.reverse .pillar-visual { order: initial; } }
+
+  .pillar-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(180deg, rgba(31,74,122,.08), rgba(31,74,122,.02));
+    border: 1px solid rgba(31,74,122,.15);
+    color: var(--primary); font-weight: 700; font-size: 17px;
+    margin-bottom: 18px; font-family: 'Inter', sans-serif;
+  }
+  .pillar-tag { color: var(--accent-2); font-weight: 600; font-size: 15px; margin-bottom: 14px; }
+  .pillar-copy p { font-size: 17px; color: var(--ink-2); max-width: 480px; }
+
+  .pillar-visual {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    aspect-ratio: 4 / 3;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar-visual svg { width: 100%; height: 100%; max-width: 460px; }
+
+  /* -- TIMELINE -- */
+  .timeline { background: var(--primary-2); color: #e8eef6; }
+  .timeline h2 { color: #fff; }
+  .timeline .section-kicker { color: #7fd4bb; }
+  .timeline p { color: #b7c4d3; }
+  .timeline-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 56px;
+    position: relative;
+  }
+  @media (max-width: 900px) { .timeline-grid { grid-template-columns: 1fr; gap: 28px; } }
+  .timeline-col {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: var(--radius);
+    padding: 28px;
+    position: relative;
+  }
+  .timeline-year {
+    font-family: 'Fraunces', serif; font-size: 14px; letter-spacing: .2em;
+    text-transform: uppercase; color: #7fd4bb; margin-bottom: 10px; font-weight: 600;
+  }
+  .timeline-title { font-family: 'Fraunces', serif; font-size: 26px; color: #fff; margin-bottom: 16px; font-weight: 600; }
+  .timeline-col ul { margin: 0; padding: 0; list-style: none; }
+  .timeline-col li {
+    padding: 10px 0; border-top: 1px solid rgba(255,255,255,.07);
+    font-size: 15px; color: #d6dde7;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .timeline-col li:first-child { border-top: 0; padding-top: 0; }
+  .timeline-col li::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: #7fd4bb; margin-top: 9px; flex-shrink: 0;
+  }
+  .timeline-dot {
+    position: absolute; top: -10px; left: 28px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent); border: 4px solid var(--primary-2);
+  }
+
+  /* -- NORTH STAR -- */
+  .north-star { text-align: center; padding: 120px 0; }
+  .north-star h2 { max-width: 820px; margin: 0 auto 24px; }
+  .north-star .big-stat {
+    font-family: 'Fraunces', serif; font-size: clamp(64px, 10vw, 128px); line-height: 1;
+    color: var(--primary); font-weight: 700; margin: 32px 0 8px;
+    letter-spacing: -0.03em;
+  }
+  .north-star .stat-label { font-size: 17px; color: var(--muted); max-width: 480px; margin: 0 auto; }
+  .stats-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px;
+    max-width: 900px; margin-left: auto; margin-right: auto;
+  }
+  @media (max-width: 720px) { .stats-row { grid-template-columns: 1fr; } }
+  .stat-card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px; text-align: left;
+  }
+  .stat-card .n { font-family: 'Fraunces', serif; font-size: 38px; color: var(--primary); font-weight: 600; letter-spacing: -0.02em; }
+  .stat-card .l { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+  /* -- FOOTER -- */
+  footer {
+    padding: 40px 0 56px;
+    border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 14px;
+  }
+  .foot-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+  /* -- ANIMATIONS -- */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* -- REUSABLE SVG STYLES -- */
+  .stroke-p { stroke: var(--primary); }
+  .stroke-a { stroke: var(--accent); }
+  .fill-p   { fill: var(--primary); }
+  .fill-a   { fill: var(--accent); }
+  .fill-soft { fill: rgba(31,74,122,.08); }
+  .fill-soft-a { fill: rgba(15,155,122,.1); }
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<nav class="nav" aria-label="primary">
+  <div class="nav-inner">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="36" height="36" rx="10" fill="var(--primary)"/>
+        <path d="M12 26 L20 12 L28 26" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="20" cy="22" r="2.2" fill="var(--accent)"/>
+      </svg>
+      AdmitHub
+    </div>
+    <div class="nav-links">
+      <a href="#problem">Problem</a>
+      <a href="#pillars">Vision</a>
+      <a href="#timeline">Roadmap</a>
+      <a href="#north-star">North star</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============== HERO ============== -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> 2-Year Product Vision &nbsp;·&nbsp; 2026 → 2028</span>
+      <span class="updated">Last updated · Apr 22, 2026 12:16 PM ET</span>
+      <h1>The admit command center for home health, <em>by 2028.</em></h1>
+      <p class="lede">An AI-native platform where every acceptable referral converts — fast and accurately — the ones we can't serve decline instantly with a clear reason, and every stakeholder has real-time visibility from referral to admission.</p>
+      <div class="hero-meta">
+        <div class="meta-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Zero leakage of acceptable referrals
+        </div>
+        <div class="meta-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Decisions in minutes, not days
+        </div>
+        <div class="meta-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.5A5.5 5.5 0 0 1 12 5a5.5 5.5 0 0 1 8 5.5C20 17.5 12 22 12 22z"/></svg>
+          Patients at the center
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero visual: referrals flowing in, converging, emerging as admissions -->
+    <div class="reveal">
+      <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Referrals flowing from many sources into AdmitHub and emerging as admissions">
+        <defs>
+          <linearGradient id="heroGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1f4a7a"/>
+            <stop offset="100%" stop-color="#0f9b7a"/>
+          </linearGradient>
+          <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#1f4a7a" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#1f4a7a" stop-opacity="0.45"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Source nodes -->
+        <g font-family="Inter" font-size="11" fill="#5b6b7f">
+          <g transform="translate(24,60)">
+            <rect width="110" height="36" rx="8" fill="#fff" stroke="#e4e7ec"/>
+            <circle cx="18" cy="18" r="6" fill="#1f4a7a" opacity=".15"/><circle cx="18" cy="18" r="3" fill="#1f4a7a"/>
+            <text x="32" y="22" fill="#0b1a2b" font-weight="600">Hospital</text>
+          </g>
+          <g transform="translate(24,130)">
+            <rect width="110" height="36" rx="8" fill="#fff" stroke="#e4e7ec"/>
+            <circle cx="18" cy="18" r="6" fill="#1f4a7a" opacity=".15"/><circle cx="18" cy="18" r="3" fill="#1f4a7a"/>
+            <text x="32" y="22" fill="#0b1a2b" font-weight="600">SNF</text>
+          </g>
+          <g transform="translate(24,200)">
+            <rect width="110" height="36" rx="8" fill="#fff" stroke="#e4e7ec"/>
+            <circle cx="18" cy="18" r="6" fill="#1f4a7a" opacity=".15"/><circle cx="18" cy="18" r="3" fill="#1f4a7a"/>
+            <text x="32" y="22" fill="#0b1a2b" font-weight="600">Physician</text>
+          </g>
+          <g transform="translate(24,270)">
+            <rect width="110" height="36" rx="8" fill="#fff" stroke="#e4e7ec"/>
+            <circle cx="18" cy="18" r="6" fill="#1f4a7a" opacity=".15"/><circle cx="18" cy="18" r="3" fill="#1f4a7a"/>
+            <text x="32" y="22" fill="#0b1a2b" font-weight="600">Payer portal</text>
+          </g>
+          <g transform="translate(24,340)">
+            <rect width="110" height="36" rx="8" fill="#fff" stroke="#e4e7ec"/>
+            <circle cx="18" cy="18" r="6" fill="#1f4a7a" opacity=".15"/><circle cx="18" cy="18" r="3" fill="#1f4a7a"/>
+            <text x="32" y="22" fill="#0b1a2b" font-weight="600">Fax / Email</text>
+          </g>
+        </g>
+
+        <!-- Flow lines -->
+        <g fill="none" stroke="url(#flowGrad)" stroke-width="1.5">
+          <path d="M140 78 C 210 78, 220 200, 260 210"/>
+          <path d="M140 148 C 210 148, 220 205, 260 210"/>
+          <path d="M140 218 C 220 218, 230 210, 260 210"/>
+          <path d="M140 288 C 210 288, 220 220, 260 210"/>
+          <path d="M140 358 C 210 358, 220 230, 260 210"/>
+        </g>
+
+        <!-- Hub -->
+        <g>
+          <circle cx="310" cy="210" r="78" fill="url(#heroGrad)" opacity=".08"/>
+          <circle cx="310" cy="210" r="58" fill="url(#heroGrad)" opacity=".18"/>
+          <circle cx="310" cy="210" r="38" fill="url(#heroGrad)"/>
+          <path d="M298 220 L308 204 L318 220" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="308" cy="214" r="2.4" fill="#fff"/>
+          <text x="310" y="305" text-anchor="middle" font-family="Fraunces, serif" font-size="13" font-weight="600" fill="#0b1a2b">AdmitHub</text>
+        </g>
+
+        <!-- Outflow to admission -->
+        <g fill="none" stroke="#0f9b7a" stroke-width="2">
+          <path d="M368 210 C 410 210, 420 210, 450 210"/>
+        </g>
+        <g transform="translate(430,188)">
+          <rect width="74" height="44" rx="10" fill="#0f9b7a"/>
+          <text x="37" y="20" text-anchor="middle" font-family="Inter" font-size="10" font-weight="700" fill="#fff" letter-spacing=".1em">ADMITTED</text>
+          <text x="37" y="34" text-anchor="middle" font-family="Inter" font-size="10" fill="#fff" opacity=".85">in &lt; 24 hrs</text>
+        </g>
+
+        <!-- Ambient dots -->
+        <g fill="#0f9b7a" opacity=".3">
+          <circle cx="190" cy="100" r="2"/>
+          <circle cx="230" cy="170" r="1.5"/>
+          <circle cx="200" cy="260" r="2"/>
+          <circle cx="240" cy="330" r="1.5"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<!-- ============== PROBLEM ============== -->
+<section id="problem" class="problem">
+  <div class="wrap problem-grid">
+    <div class="reveal">
+      <div class="section-kicker">The problem today</div>
+      <h2>Intake is where referrals go to wait.</h2>
+      <p>Faxes sit. Portals go unmonitored. Eligibility checks happen hours later. Clinical review gets stuck in someone's queue. By the time an acceptable referral gets a yes, the hospital has already placed it with the competition.</p>
+      <p>Every step is a chance to drop the baton. Every drop is lost revenue, a lost patient, and a damaged relationship with the referring source.</p>
+    </div>
+    <div class="reveal">
+      <svg viewBox="0 0 520 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fragmented intake today vs unified AdmitHub tomorrow">
+        <!-- Today -->
+        <g>
+          <text x="20" y="28" font-family="Inter" font-size="11" font-weight="700" fill="#5b6b7f" letter-spacing=".1em">TODAY</text>
+          <g transform="translate(20,44)">
+            <rect width="230" height="270" rx="12" fill="#fff" stroke="#e4e7ec"/>
+            <!-- Disconnected nodes -->
+            <g font-family="Inter" font-size="10" fill="#5b6b7f">
+              <g transform="translate(16,20)">
+                <rect width="88" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Fax inbox</text>
+              </g>
+              <g transform="translate(120,20)">
+                <rect width="90" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">CarePort</text>
+              </g>
+              <g transform="translate(16,64)">
+                <rect width="88" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Email</text>
+              </g>
+              <g transform="translate(120,64)">
+                <rect width="90" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Epic</text>
+              </g>
+              <g transform="translate(16,108)">
+                <rect width="88" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">HCHB</text>
+              </g>
+              <g transform="translate(120,108)">
+                <rect width="90" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Navihealth</text>
+              </g>
+              <g transform="translate(16,152)">
+                <rect width="88" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Phone</text>
+              </g>
+              <g transform="translate(120,152)">
+                <rect width="90" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Spreadsheet</text>
+              </g>
+              <g transform="translate(16,196)">
+                <rect width="88" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Sticky note</text>
+              </g>
+              <g transform="translate(120,196)">
+                <rect width="90" height="30" rx="6" fill="#f4f2ec" stroke="#e4e7ec"/>
+                <text x="10" y="19" fill="#0b1a2b">Slack DM</text>
+              </g>
+            </g>
+            <text x="115" y="252" text-anchor="middle" font-family="Inter" font-size="11" fill="#d08a4a" font-weight="600">10+ disconnected tools</text>
+          </g>
+        </g>
+
+        <!-- Arrow -->
+        <g transform="translate(260,180)">
+          <path d="M0 0 L32 0" stroke="#1f4a7a" stroke-width="2" fill="none"/>
+          <path d="M26 -6 L34 0 L26 6" stroke="#1f4a7a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <!-- Tomorrow -->
+        <g transform="translate(310,0)">
+          <text x="0" y="28" font-family="Inter" font-size="11" font-weight="700" fill="#0f9b7a" letter-spacing=".1em">WITH ADMITSHUB</text>
+          <g transform="translate(0,44)">
+            <rect width="190" height="270" rx="12" fill="url(#tomorrowGrad)" stroke="#d4e3dc"/>
+            <defs>
+              <linearGradient id="tomorrowGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e9f5f1"/>
+                <stop offset="100%" stop-color="#ffffff"/>
+              </linearGradient>
+            </defs>
+            <g transform="translate(95,100)">
+              <circle r="44" fill="#0f9b7a" opacity=".1"/>
+              <circle r="30" fill="#0f9b7a" opacity=".18"/>
+              <circle r="18" fill="#0f9b7a"/>
+              <path d="M-6 2 L0 -8 L6 2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </g>
+            <text x="95" y="190" text-anchor="middle" font-family="Fraunces, serif" font-size="14" font-weight="600" fill="#0b1a2b">One system</text>
+            <text x="95" y="210" text-anchor="middle" font-family="Inter" font-size="11" fill="#5b6b7f">One inbox · One status · One truth</text>
+            <text x="95" y="252" text-anchor="middle" font-family="Inter" font-size="11" fill="#0f9b7a" font-weight="600">Every channel unified</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PILLARS ============== -->
+<section id="pillars">
+  <div class="wrap">
+    <div class="pillars-intro reveal">
+      <div class="section-kicker">The 8 pillars</div>
+      <h2>What AdmitHub looks like in 2028.</h2>
+      <p>Eight capabilities working as one platform. Each pillar removes friction, latency, or uncertainty from the referral-to-admit journey.</p>
+    </div>
+
+    <div class="pillar-summary reveal" aria-label="Jump to a pillar">
+      <a class="pillar-chip" href="#pillar-1"><span class="pillar-chip-num">01</span><span class="pillar-chip-title">Zero leakage of acceptable referrals</span></a>
+      <a class="pillar-chip" href="#pillar-2"><span class="pillar-chip-num">02</span><span class="pillar-chip-title">Minimal human intervention</span></a>
+      <a class="pillar-chip" href="#pillar-3"><span class="pillar-chip-num">03</span><span class="pillar-chip-title">Ecosystem integrations &amp; unified communications</span></a>
+      <a class="pillar-chip" href="#pillar-4"><span class="pillar-chip-num">04</span><span class="pillar-chip-title">Smart routing &amp; escalation</span></a>
+      <a class="pillar-chip" href="#pillar-5"><span class="pillar-chip-num">05</span><span class="pillar-chip-title">Seamless lifecycle hand-offs</span></a>
+      <a class="pillar-chip" href="#pillar-6"><span class="pillar-chip-num">06</span><span class="pillar-chip-title">Real-time status for referral sources</span></a>
+      <a class="pillar-chip" href="#pillar-7"><span class="pillar-chip-num">07</span><span class="pillar-chip-title">Patient &amp; family experience</span></a>
+      <a class="pillar-chip" href="#pillar-8"><span class="pillar-chip-num">08</span><span class="pillar-chip-title">Compliance &amp; auditability</span></a>
+    </div>
+
+    <!-- PILLAR 1 — Zero leakage (was #1) -->
+    <div id="pillar-1" class="pillar reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">01</div>
+        <div class="pillar-tag">Zero leakage of acceptable referrals</div>
+        <h3>Every acceptable referral gets a fast, accurate yes.</h3>
+        <p>Automated insurance eligibility, staffing/coverage checks, and clinical fit screening run within minutes of arrival. No acceptable referral is lost to slow response, a missed fax, or an overloaded coordinator. If an agency can serve the patient, AdmitHub knows it — instantly.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Funnel showing all acceptable referrals converting to admissions">
+          <defs>
+            <linearGradient id="funnelG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1f4a7a"/>
+              <stop offset="100%" stop-color="#0f9b7a"/>
+            </linearGradient>
+          </defs>
+          <!-- incoming dots -->
+          <g fill="#1f4a7a">
+            <circle cx="60" cy="40" r="5"/>
+            <circle cx="110" cy="32" r="5"/>
+            <circle cx="160" cy="46" r="5"/>
+            <circle cx="210" cy="30" r="5"/>
+            <circle cx="260" cy="42" r="5"/>
+            <circle cx="310" cy="34" r="5"/>
+            <circle cx="350" cy="48" r="5"/>
+          </g>
+          <text x="200" y="78" text-anchor="middle" font-family="Inter" font-size="11" fill="#5b6b7f">Incoming referrals</text>
+
+          <!-- funnel -->
+          <path d="M50 100 L350 100 L240 220 L160 220 Z" fill="url(#funnelG)" opacity=".12" stroke="#1f4a7a" stroke-width="1.5"/>
+
+          <!-- checkpoints -->
+          <g font-family="Inter" font-size="11" fill="#0b1a2b">
+            <g transform="translate(80,130)">
+              <circle r="10" fill="#fff" stroke="#0f9b7a" stroke-width="2"/>
+              <path d="M-4 0 L-1 3 L4 -3" stroke="#0f9b7a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="18" y="4">Insurance eligibility</text>
+            </g>
+            <g transform="translate(80,160)">
+              <circle r="10" fill="#fff" stroke="#0f9b7a" stroke-width="2"/>
+              <path d="M-4 0 L-1 3 L4 -3" stroke="#0f9b7a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="18" y="4">Service area</text>
+            </g>
+            <g transform="translate(80,190)">
+              <circle r="10" fill="#fff" stroke="#0f9b7a" stroke-width="2"/>
+              <path d="M-4 0 L-1 3 L4 -3" stroke="#0f9b7a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="18" y="4">Clinical fit</text>
+            </g>
+          </g>
+
+          <!-- output -->
+          <g transform="translate(160,240)">
+            <rect width="80" height="36" rx="10" fill="#0f9b7a"/>
+            <text x="40" y="22" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#fff" letter-spacing=".1em">ADMITTED</text>
+          </g>
+          <g fill="#0f9b7a">
+            <circle cx="185" cy="288" r="3"/>
+            <circle cx="200" cy="292" r="3"/>
+            <circle cx="215" cy="288" r="3"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 2 — Minimal human intervention (was #5) -->
+    <div id="pillar-2" class="pillar reverse reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">02</div>
+        <div class="pillar-tag">Minimal human intervention</div>
+        <h3>AI agents do the repetitive work. Humans make the judgment calls.</h3>
+        <p>E&amp;B checks. Staffing availability. Document parsing. AI phone calls to referral sources for missing info. Scheduling and routing. The work that fills a coordinator's day is done in seconds — so coordinators spend their time on the cases that actually need a human.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="AI agents working in parallel">
+          <g font-family="Inter" font-size="11" fill="#0b1a2b">
+            <!-- Central -->
+            <g transform="translate(170,120)">
+              <rect width="60" height="60" rx="14" fill="#1f4a7a"/>
+              <text x="30" y="32" text-anchor="middle" fill="#fff" font-weight="700" font-size="10" letter-spacing=".08em">AI</text>
+              <text x="30" y="46" text-anchor="middle" fill="#fff" font-weight="700" font-size="10" letter-spacing=".08em">ORCH.</text>
+            </g>
+
+            <!-- Agents around it -->
+            <g>
+              <g transform="translate(30,40)">
+                <rect width="120" height="40" rx="10" fill="#fff" stroke="#e4e7ec"/>
+                <circle cx="16" cy="20" r="6" fill="#0f9b7a"/>
+                <text x="30" y="18" font-weight="600" font-size="10">E&amp;B agent</text>
+                <text x="30" y="32" font-size="9" fill="#5b6b7f">Eligibility · benefits</text>
+              </g>
+              <g transform="translate(250,40)">
+                <rect width="120" height="40" rx="10" fill="#fff" stroke="#e4e7ec"/>
+                <circle cx="16" cy="20" r="6" fill="#0f9b7a"/>
+                <text x="30" y="18" font-weight="600" font-size="10">Doc parser</text>
+                <text x="30" y="32" font-size="9" fill="#5b6b7f">Face sheet · H&amp;P · meds</text>
+              </g>
+              <g transform="translate(30,130)">
+                <rect width="120" height="40" rx="10" fill="#fff" stroke="#e4e7ec"/>
+                <circle cx="16" cy="20" r="6" fill="#d08a4a"/>
+                <text x="30" y="18" font-weight="600" font-size="10">Staffing check</text>
+                <text x="30" y="32" font-size="9" fill="#5b6b7f">Capacity · geography</text>
+              </g>
+              <g transform="translate(250,130)">
+                <rect width="120" height="40" rx="10" fill="#fff" stroke="#e4e7ec"/>
+                <circle cx="16" cy="20" r="6" fill="#7a6ec9"/>
+                <text x="30" y="18" font-weight="600" font-size="10">Voice agent</text>
+                <text x="30" y="32" font-size="9" fill="#5b6b7f">Calls for missing info</text>
+              </g>
+              <g transform="translate(30,220)">
+                <rect width="120" height="40" rx="10" fill="#fff" stroke="#e4e7ec"/>
+                <circle cx="16" cy="20" r="6" fill="#1f4a7a"/>
+                <text x="30" y="18" font-weight="600" font-size="10">Scheduler</text>
+                <text x="30" y="32" font-size="9" fill="#5b6b7f">SOC routing</text>
+              </g>
+              <g transform="translate(250,220)">
+                <rect width="120" height="40" rx="10" fill="#fff" stroke="#e4e7ec"/>
+                <circle cx="16" cy="20" r="6" fill="#0f9b7a"/>
+                <text x="30" y="18" font-weight="600" font-size="10">Triage agent</text>
+                <text x="30" y="32" font-size="9" fill="#5b6b7f">Clinical signals</text>
+              </g>
+            </g>
+
+            <!-- Connectors -->
+            <g stroke="#c9d1db" stroke-width="1" fill="none">
+              <path d="M150 60 L178 138"/>
+              <path d="M250 60 L222 138"/>
+              <path d="M150 150 L178 150"/>
+              <path d="M250 150 L222 150"/>
+              <path d="M150 240 L178 166"/>
+              <path d="M250 240 L222 166"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 3 — Ecosystem integrations (was #8) -->
+    <div id="pillar-3" class="pillar reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">03</div>
+        <div class="pillar-tag">Ecosystem integrations &amp; unified communications</div>
+        <h3>One inbox. Every channel. Full history.</h3>
+        <p>AdmitHub connects into the ecosystem — EMRs, HCHB, Epic, Navihealth, CarePort, Curaspan, payer portals, fax, email. Intake staff communicate with referral sources through whichever channel the source prefers, without ever leaving AdmitHub. Real-time portal sync means case manager updates land in AdmitHub the moment they happen — no polling, no refresh, no missed changes. The source doesn't change how they work. Your team does everything from one place.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="AdmitHub as unified hub connecting to every referral channel">
+          <!-- Center hub -->
+          <g transform="translate(200,150)">
+            <circle r="50" fill="#1f4a7a" opacity=".08"/>
+            <circle r="34" fill="#1f4a7a"/>
+            <path d="M-10 8 L0 -8 L10 8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="0" cy="2" r="2.5" fill="#0f9b7a"/>
+          </g>
+          <text x="200" y="220" text-anchor="middle" font-family="Inter" font-size="11" font-weight="600" fill="#0b1a2b">AdmitHub</text>
+          <text x="200" y="234" text-anchor="middle" font-family="Inter" font-size="10" fill="#5b6b7f">Unified inbox</text>
+
+          <!-- Spokes + nodes -->
+          <g font-family="Inter" font-size="10" fill="#0b1a2b">
+            <g>
+              <line x1="200" y1="150" x2="70" y2="60" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(20,44)">
+                <rect width="100" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="50" y="20" text-anchor="middle" font-weight="600">Epic</text>
+              </g>
+            </g>
+            <g>
+              <line x1="200" y1="150" x2="200" y2="50" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(150,18)">
+                <rect width="100" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="50" y="20" text-anchor="middle" font-weight="600">CarePort</text>
+              </g>
+            </g>
+            <g>
+              <line x1="200" y1="150" x2="330" y2="60" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(280,44)">
+                <rect width="100" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="50" y="20" text-anchor="middle" font-weight="600">Navihealth</text>
+              </g>
+            </g>
+            <g>
+              <line x1="200" y1="150" x2="50" y2="150" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(0,134)">
+                <rect width="70" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="35" y="20" text-anchor="middle" font-weight="600">HCHB</text>
+              </g>
+            </g>
+            <g>
+              <line x1="200" y1="150" x2="350" y2="150" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(330,134)">
+                <rect width="68" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="34" y="20" text-anchor="middle" font-weight="600">Email</text>
+              </g>
+            </g>
+            <g>
+              <line x1="200" y1="150" x2="80" y2="260" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(20,252)">
+                <rect width="90" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="45" y="20" text-anchor="middle" font-weight="600">Curaspan</text>
+              </g>
+            </g>
+            <g>
+              <line x1="200" y1="150" x2="320" y2="260" stroke="#c9d1db" stroke-width="1.2"/>
+              <g transform="translate(280,252)">
+                <rect width="100" height="32" rx="8" fill="#fff" stroke="#e4e7ec"/>
+                <text x="50" y="20" text-anchor="middle" font-weight="600">Fax · Portal</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- Reply chip -->
+          <g transform="translate(148,180)">
+            <rect width="104" height="22" rx="11" fill="#0f9b7a"/>
+            <text x="52" y="15" text-anchor="middle" font-family="Inter" font-size="9" font-weight="700" fill="#fff" letter-spacing=".08em">REPLY IN-CHANNEL</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 4 — Smart routing (was #2) -->
+    <div id="pillar-4" class="pillar reverse reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">04</div>
+        <div class="pillar-tag">Smart routing &amp; escalation</div>
+        <h3>Escalations land on the right team — with context pre-attached.</h3>
+        <p>Insurance, staffing, and clinical signals pre-scan every referral. When human review is needed, it routes to clinical, auth, staffing, or BD with the full picture already assembled. No "who owns this?" limbo. No hunt for the face sheet.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Intelligent routing decision tree">
+          <!-- Referral node -->
+          <g transform="translate(170,20)">
+            <rect width="80" height="32" rx="8" fill="#1f4a7a"/>
+            <text x="40" y="20" text-anchor="middle" font-family="Inter" font-size="11" font-weight="700" fill="#fff">Referral</text>
+          </g>
+          <!-- pre-scan -->
+          <g transform="translate(130,78)">
+            <rect width="160" height="36" rx="8" fill="#fff" stroke="#0f9b7a" stroke-width="1.5"/>
+            <circle cx="16" cy="18" r="5" fill="#0f9b7a"/>
+            <text x="30" y="22" font-family="Inter" font-size="11" fill="#0b1a2b" font-weight="600">AI pre-scan</text>
+            <text x="94" y="22" font-family="Inter" font-size="10" fill="#5b6b7f">ins · staff · clinical</text>
+          </g>
+          <!-- connectors -->
+          <g stroke="#c9d1db" stroke-width="1.5" fill="none">
+            <path d="M210 52 L210 78"/>
+            <path d="M150 114 L80 160"/>
+            <path d="M190 114 L160 160"/>
+            <path d="M230 114 L240 160"/>
+            <path d="M270 114 L320 160"/>
+          </g>
+          <!-- routes -->
+          <g font-family="Inter" font-size="10" fill="#0b1a2b">
+            <g transform="translate(30,160)">
+              <rect width="110" height="50" rx="8" fill="#fff" stroke="#e4e7ec"/>
+              <circle cx="14" cy="16" r="5" fill="#1f4a7a"/>
+              <text x="26" y="20" font-weight="600">Clinical</text>
+              <text x="12" y="38" fill="#5b6b7f">High acuity flagged</text>
+            </g>
+            <g transform="translate(150,160)">
+              <rect width="80" height="50" rx="8" fill="#fff" stroke="#e4e7ec"/>
+              <circle cx="14" cy="16" r="5" fill="#0f9b7a"/>
+              <text x="26" y="20" font-weight="600">Auth</text>
+              <text x="12" y="38" fill="#5b6b7f">Prior auth</text>
+            </g>
+            <g transform="translate(238,160)">
+              <rect width="80" height="50" rx="8" fill="#fff" stroke="#e4e7ec"/>
+              <circle cx="14" cy="16" r="5" fill="#d08a4a"/>
+              <text x="26" y="20" font-weight="600">Staffing</text>
+              <text x="12" y="38" fill="#5b6b7f">Capacity</text>
+            </g>
+            <g transform="translate(326,160)">
+              <rect width="60" height="50" rx="8" fill="#fff" stroke="#e4e7ec"/>
+              <circle cx="14" cy="16" r="5" fill="#7a6ec9"/>
+              <text x="26" y="20" font-weight="600">BD</text>
+              <text x="12" y="38" fill="#5b6b7f">Source</text>
+            </g>
+          </g>
+          <g transform="translate(100,234)" font-family="Inter" font-size="10" fill="#5b6b7f">
+            <text x="100" y="12" text-anchor="middle">Auto-accepted referrals bypass escalation entirely</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 5 — Seamless lifecycle hand-offs -->
+    <div id="pillar-5" class="pillar reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">05</div>
+        <div class="pillar-tag">Seamless lifecycle hand-offs</div>
+        <h3>Nothing falls between teams.</h3>
+        <p>Intake → clinical review → scheduling → admission. Every hand-off is structured and loss-less. Ownership and next action are always explicit. If a referral stalls, AdmitHub knows before anyone has to ask.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Lifecycle hand-offs from intake to admission">
+          <!-- Timeline track -->
+          <line x1="40" y1="150" x2="360" y2="150" stroke="#e4e7ec" stroke-width="2"/>
+          <line x1="40" y1="150" x2="360" y2="150" stroke="#0f9b7a" stroke-width="2" stroke-dasharray="4 4"/>
+
+          <!-- Nodes -->
+          <g font-family="Inter" font-size="10" fill="#0b1a2b">
+            <g transform="translate(40,150)">
+              <circle r="14" fill="#0f9b7a"/>
+              <path d="M-5 0 L-1 4 L5 -4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <text x="0" y="36" text-anchor="middle" font-weight="600">Intake</text>
+              <text x="0" y="50" text-anchor="middle" font-size="9" fill="#5b6b7f">received</text>
+            </g>
+            <g transform="translate(120,150)">
+              <circle r="14" fill="#0f9b7a"/>
+              <path d="M-5 0 L-1 4 L5 -4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <text x="0" y="36" text-anchor="middle" font-weight="600">Clinical</text>
+              <text x="0" y="50" text-anchor="middle" font-size="9" fill="#5b6b7f">reviewed</text>
+            </g>
+            <g transform="translate(200,150)">
+              <circle r="14" fill="#1f4a7a"/>
+              <circle r="5" fill="#fff"/>
+              <text x="0" y="36" text-anchor="middle" font-weight="600">Scheduling</text>
+              <text x="0" y="50" text-anchor="middle" font-size="9" fill="#5b6b7f">in progress</text>
+            </g>
+            <g transform="translate(280,150)" opacity=".55">
+              <circle r="14" fill="#fff" stroke="#c9d1db" stroke-width="2"/>
+              <text x="0" y="36" text-anchor="middle" font-weight="600">Admit</text>
+            </g>
+            <g transform="translate(360,150)" opacity=".55">
+              <circle r="14" fill="#fff" stroke="#c9d1db" stroke-width="2"/>
+              <text x="0" y="36" text-anchor="middle" font-weight="600">SOC</text>
+            </g>
+          </g>
+
+          <!-- Baton pass callout -->
+          <g transform="translate(80,74)">
+            <rect width="160" height="44" rx="8" fill="#fff" stroke="#e4e7ec"/>
+            <path d="M14 22 L22 22" stroke="#0f9b7a" stroke-width="2"/>
+            <circle cx="24" cy="22" r="3" fill="#0f9b7a"/>
+            <text x="36" y="19" font-family="Inter" font-size="10" fill="#0b1a2b" font-weight="600">Context carries forward</text>
+            <text x="36" y="32" font-family="Inter" font-size="9" fill="#5b6b7f">Notes · docs · owner · SLA</text>
+          </g>
+          <path d="M160 118 L160 136" stroke="#c9d1db" stroke-width="1" fill="none"/>
+
+          <!-- Stall alert -->
+          <g transform="translate(175,198)">
+            <rect width="150" height="40" rx="8" fill="#fff4e8" stroke="#d08a4a"/>
+            <circle cx="14" cy="20" r="5" fill="#d08a4a"/>
+            <text x="26" y="17" font-family="Inter" font-size="10" fill="#0b1a2b" font-weight="600">SLA at risk</text>
+            <text x="26" y="30" font-family="Inter" font-size="9" fill="#5b6b7f">Auto-escalated at 2h</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 6 — Real-time status -->
+    <div id="pillar-6" class="pillar reverse reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">06</div>
+        <div class="pillar-tag">Real-time status for referral sources</div>
+        <h3>No more phone calls asking "what's the status?"</h3>
+        <p>Hospitals, SNFs, and physicians see referral status live: received, accepted, pending, scheduled, admitted, declined-with-reason. Trust builds because they know what's happening without having to chase anyone for an answer.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Referral status timeline visible to referral source">
+          <rect x="30" y="30" width="340" height="240" rx="14" fill="#fff" stroke="#e4e7ec"/>
+          <g font-family="Inter">
+            <text x="50" y="60" font-size="11" font-weight="700" fill="#5b6b7f" letter-spacing=".12em">REFERRAL · JANE DOE</text>
+            <text x="350" y="60" text-anchor="end" font-size="10" fill="#0f9b7a" font-weight="600">● LIVE</text>
+
+            <!-- steps -->
+            <g transform="translate(50,90)">
+              <circle cx="8" cy="8" r="8" fill="#0f9b7a"/>
+              <path d="M4 8 L7 11 L12 5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="26" y="8" font-size="12" font-weight="600" fill="#0b1a2b">Received</text>
+              <text x="26" y="22" font-size="10" fill="#5b6b7f">10:02 AM · via CarePort</text>
+            </g>
+            <line x1="58" y1="108" x2="58" y2="128" stroke="#0f9b7a" stroke-width="2"/>
+            <g transform="translate(50,130)">
+              <circle cx="8" cy="8" r="8" fill="#0f9b7a"/>
+              <path d="M4 8 L7 11 L12 5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="26" y="8" font-size="12" font-weight="600" fill="#0b1a2b">Accepted</text>
+              <text x="26" y="22" font-size="10" fill="#5b6b7f">10:08 AM · 6 minutes</text>
+            </g>
+            <line x1="58" y1="148" x2="58" y2="168" stroke="#0f9b7a" stroke-width="2"/>
+            <g transform="translate(50,170)">
+              <circle cx="8" cy="8" r="8" fill="#1f4a7a"/>
+              <circle cx="8" cy="8" r="3" fill="#fff"/>
+              <text x="26" y="8" font-size="12" font-weight="600" fill="#0b1a2b">Scheduling</text>
+              <text x="26" y="22" font-size="10" fill="#5b6b7f">SOC targeting tomorrow</text>
+            </g>
+            <line x1="58" y1="188" x2="58" y2="208" stroke="#c9d1db" stroke-width="2" stroke-dasharray="3 3"/>
+            <g transform="translate(50,210)" opacity=".55">
+              <circle cx="8" cy="8" r="8" fill="#fff" stroke="#c9d1db" stroke-width="2"/>
+              <text x="26" y="8" font-size="12" font-weight="600" fill="#0b1a2b">Admission</text>
+              <text x="26" y="22" font-size="10" fill="#5b6b7f">Target: tomorrow 2pm</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 7 — Patient & family experience -->
+    <div id="pillar-7" class="pillar reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">07</div>
+        <div class="pillar-tag">Patient &amp; family experience</div>
+        <h3>The journey, in plain language, from the moment the referral arrives.</h3>
+        <p>Patients and families get proactive updates: "Your referral was received." "Your nurse is scheduled for Tuesday." "Here's what to expect on admission day." Less anxiety. Fewer inbound calls to the agency. Higher NPS — and a reputation that brings the next referral in the door.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Patient phone showing a friendly journey timeline">
+          <!-- Phone -->
+          <g transform="translate(110,30)">
+            <rect width="180" height="240" rx="24" fill="#0b1a2b"/>
+            <rect x="6" y="6" width="168" height="228" rx="18" fill="#fbfaf7"/>
+            <rect x="72" y="10" width="36" height="6" rx="3" fill="#0b1a2b"/>
+
+            <g font-family="Inter" fill="#0b1a2b">
+              <text x="90" y="42" text-anchor="middle" font-size="11" font-weight="700" letter-spacing=".1em" fill="#5b6b7f">YOUR CARE</text>
+
+              <g transform="translate(20,58)">
+                <rect width="140" height="40" rx="10" fill="#e9f5f1"/>
+                <circle cx="16" cy="20" r="8" fill="#0f9b7a"/>
+                <path d="M12 20 L15 23 L20 17" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="32" y="18" font-size="10" font-weight="600">Referral received</text>
+                <text x="32" y="30" font-size="9" fill="#5b6b7f">Yesterday · 10:02 AM</text>
+              </g>
+              <g transform="translate(20,108)">
+                <rect width="140" height="40" rx="10" fill="#e9f5f1"/>
+                <circle cx="16" cy="20" r="8" fill="#0f9b7a"/>
+                <path d="M12 20 L15 23 L20 17" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="32" y="18" font-size="10" font-weight="600">Nurse assigned</text>
+                <text x="32" y="30" font-size="9" fill="#5b6b7f">Maria L. · wound care</text>
+              </g>
+              <g transform="translate(20,158)">
+                <rect width="140" height="40" rx="10" fill="#fff" stroke="#c9d1db"/>
+                <circle cx="16" cy="20" r="8" fill="#1f4a7a"/>
+                <circle cx="16" cy="20" r="3" fill="#fff"/>
+                <text x="32" y="18" font-size="10" font-weight="600">Visit Tuesday 2 PM</text>
+                <text x="32" y="30" font-size="9" fill="#5b6b7f">What to expect →</text>
+              </g>
+              <g transform="translate(20,208)">
+                <rect width="140" height="20" rx="10" fill="#fbfaf7" stroke="#e4e7ec"/>
+                <text x="70" y="14" text-anchor="middle" font-size="9" fill="#5b6b7f">Message your care team</text>
+              </g>
+            </g>
+          </g>
+
+          <!-- Ambient hearts -->
+          <g fill="#0f9b7a" opacity=".4">
+            <path d="M60 80 C 60 72, 72 72, 72 82 C 72 72, 84 72, 84 80 C 84 92, 72 100, 72 100 C 72 100, 60 92, 60 80 Z"/>
+          </g>
+          <g fill="#7a6ec9" opacity=".35">
+            <path d="M320 200 C 320 192, 332 192, 332 202 C 332 192, 344 192, 344 200 C 344 212, 332 220, 332 220 C 332 220, 320 212, 320 200 Z"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PILLAR 8 — Compliance & auditability -->
+    <div id="pillar-8" class="pillar reverse reveal">
+      <div class="pillar-copy">
+        <div class="pillar-num">08</div>
+        <div class="pillar-tag">Compliance &amp; auditability</div>
+        <h3>Every AI decision is explainable and defensible.</h3>
+        <p>HIPAA-compliant by design. A complete audit trail for CMS, payer, and internal audits. Every acceptance or denial comes with a reason a human can read and a regulator can review. Confidence to move fast, because nothing is a black box.</p>
+      </div>
+      <div class="pillar-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Audit trail and explainable AI decision">
+          <!-- Shield -->
+          <g transform="translate(40,100)">
+            <path d="M50 0 L100 18 V 54 C 100 86, 78 108, 50 116 C 22 108, 0 86, 0 54 V 18 Z"
+                  fill="#1f4a7a" opacity=".08" stroke="#1f4a7a" stroke-width="1.5"/>
+            <path d="M32 58 L46 72 L72 42" stroke="#0f9b7a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="50" y="138" text-anchor="middle" font-family="Inter" font-size="10" fill="#5b6b7f" font-weight="600">HIPAA · SOC 2</text>
+          </g>
+
+          <!-- Audit log -->
+          <g transform="translate(170,40)">
+            <rect width="200" height="220" rx="10" fill="#fff" stroke="#e4e7ec"/>
+            <text x="16" y="24" font-family="Inter" font-size="10" font-weight="700" fill="#5b6b7f" letter-spacing=".12em">DECISION LOG</text>
+            <g font-family="Inter" font-size="10" fill="#0b1a2b">
+              <g transform="translate(16,40)">
+                <rect x="-2" y="-2" width="4" height="4" fill="#0f9b7a"/>
+                <text x="10" y="4" font-weight="600">Accepted</text>
+                <text x="10" y="18" fill="#5b6b7f" font-size="9">Medicare active · in-area · staffable</text>
+              </g>
+              <g transform="translate(16,76)">
+                <rect x="-2" y="-2" width="4" height="4" fill="#d08a4a"/>
+                <text x="10" y="4" font-weight="600">Escalated</text>
+                <text x="10" y="18" fill="#5b6b7f" font-size="9">High acuity · clinical review</text>
+              </g>
+              <g transform="translate(16,112)">
+                <rect x="-2" y="-2" width="4" height="4" fill="#1f4a7a"/>
+                <text x="10" y="4" font-weight="600">Assigned</text>
+                <text x="10" y="18" fill="#5b6b7f" font-size="9">Maria L. · match score 94</text>
+              </g>
+              <g transform="translate(16,148)">
+                <rect x="-2" y="-2" width="4" height="4" fill="#7a6ec9"/>
+                <text x="10" y="4" font-weight="600">Message sent</text>
+                <text x="10" y="18" fill="#5b6b7f" font-size="9">CarePort · Mercy Hospital</text>
+              </g>
+              <g transform="translate(16,184)">
+                <rect x="-2" y="-2" width="4" height="4" fill="#0f9b7a"/>
+                <text x="10" y="4" font-weight="600">Admitted</text>
+                <text x="10" y="18" fill="#5b6b7f" font-size="9">Audit-ready record · exportable</text>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============== TIMELINE ============== -->
+<section id="timeline" class="timeline">
+  <div class="wrap">
+    <div class="reveal" style="max-width:720px">
+      <div class="section-kicker">Roadmap</div>
+      <h2>How we get there — 2026 to 2028.</h2>
+      <p>A staged journey: strengthen the core, layer intelligence, then lead the category. Each phase builds on the last, so value compounds instead of stalling.</p>
+    </div>
+    <div class="timeline-grid">
+      <div class="timeline-col reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">NOW · 2026</div>
+        <div class="timeline-title">Strengthen the core</div>
+        <ul>
+          <li>Unified intake inbox across portals, fax, email</li>
+          <li>Automated E&amp;B checks and staffing pre-scan</li>
+          <li>Real-time referral status for referral sources</li>
+          <li>Structured hand-offs between intake, clinical, scheduling</li>
+          <li>Foundational audit trail</li>
+        </ul>
+      </div>
+      <div class="timeline-col reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">+1 YR · 2027</div>
+        <div class="timeline-title">Layer intelligence</div>
+        <ul>
+          <li>AI acceptance decisions with explanations</li>
+          <li>Smart routing to the right team — with context</li>
+          <li>AI voice agent for missing-info callbacks</li>
+          <li>Document parsing across face sheets, H&amp;Ps, meds</li>
+          <li>Deep integrations: Epic, HCHB, Navihealth, CarePort</li>
+        </ul>
+      </div>
+      <div class="timeline-col reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-year">+2 YR · 2028</div>
+        <div class="timeline-title">Lead the category</div>
+        <ul>
+          <li>Zero-touch acceptance for the clear-yes referrals</li>
+          <li>Predictive capacity and demand forecasting</li>
+          <li>Patient &amp; family journey experience</li>
+          <li>Full explainability for every AI decision</li>
+          <li>Referral-source intelligence and benchmarking</li>
+          <li>Every channel, one inbox, full history</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== NORTH STAR ============== -->
+<section id="north-star" class="north-star">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-kicker">The north star</div>
+      <h2>95% of acceptable referrals admitted within 24 hours — with confidence and a full audit trail.</h2>
+      <div class="big-stat">24<span style="font-size:.5em; color:var(--accent);">hrs</span></div>
+      <div class="stat-label">From referral received to patient admitted, for every referral we should say yes to.</div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="n">&lt; 10 min</div>
+          <div class="l">To a confident accept/decline decision</div>
+        </div>
+        <div class="stat-card">
+          <div class="n">0</div>
+          <div class="l">Acceptable referrals lost to latency or leakage</div>
+        </div>
+        <div class="stat-card">
+          <div class="n">1 inbox</div>
+          <div class="l">For every channel, every source, every message</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div>AdmitHub · 2-year product vision · 2026 → 2028</div>
+    <div>August Health</div>
+  </div>
+</footer>
+
+<script>
+  // IntersectionObserver for reveal animations
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
